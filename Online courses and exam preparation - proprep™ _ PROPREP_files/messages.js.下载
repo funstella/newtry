@@ -1,0 +1,79 @@
+﻿function initMessages()
+{
+    var successID = '#success-dialog';
+
+    $(successID).on('shown.bs.modal', function () {
+        $(successID + ' .btn-ok').focus();
+    })
+
+    var messageID = '#message-dialog';
+
+    $(messageID).on('shown.bs.modal', function () {
+        $(messageID + ' .btn-ok').focus();
+    })
+
+    var alertID = '#alert-dialog';
+
+    $(alertID).on('shown.bs.modal', function () {
+        $(alertID + ' .btn-ok').focus();
+    })
+}
+
+function okSuccessDialog(message, okEventDelegate) {
+    okDialogBase('#success-dialog', message, okEventDelegate);
+}
+
+function okMessageDialog(message, okEventDelegate)
+{
+    okDialogBase('#message-dialog', message, okEventDelegate);
+}
+
+function okCancelMessageDialog(message, okEventDelegate, cancelEventDelegate) {
+    okCancelDialogBase('#message-dialog', message, okEventDelegate, cancelEventDelegate);
+}
+
+function okAlertDialog(message, okEventDelegate) {
+    okDialogBase('#alert-dialog', message, okEventDelegate);
+}
+
+function okCancelAlertDialog(message, okEventDelegate, cancelEventDelegate) {
+    okCancelDialogBase('#alert-dialog', message, okEventDelegate, cancelEventDelegate);
+}
+
+function okDialogBase(modalID, message, okEventDelegate) {
+    var okButton = $(modalID + ' .btn-ok');
+    okButton.unbind('click');
+    okButton.show();
+
+    if (okEventDelegate) {
+        okButton.click(okEventDelegate);
+    }
+
+    var cancelButton = $(modalID + ' .btn-cancel');
+    cancelButton.unbind('click');
+    cancelButton.hide();
+
+    $(modalID + ' .message-content').html(message);
+    $(modalID).modal('show');
+}
+
+function okCancelDialogBase(modalID, message, okEventDelegate, cancelEventDelegate) {
+    var okButton = $(modalID + ' .btn-ok');
+    okButton.unbind('click');
+    okButton.show();
+
+    if (okEventDelegate) {
+        okButton.click(okEventDelegate);
+    }
+
+    var cancelButton = $(modalID + ' .btn-cancel');
+    cancelButton.unbind('click');
+    cancelButton.show();
+
+    if (cancelEventDelegate) {
+        cancelButton.click(cancelEventDelegate);
+    }
+
+    $(modalID + ' .message-content').html(message);
+    $(modalID).modal('show');
+}

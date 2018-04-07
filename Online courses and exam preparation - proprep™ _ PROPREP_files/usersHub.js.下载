@@ -1,0 +1,39 @@
+﻿var usersHub = $.connection.usersHub;
+
+usersHub.client.logOff = function (message) {
+    $.post(getBaseApiURL() + 'Users/LogOff').done(function () {
+        window.location.href = "/User/Login?showLogOff=true";
+    });
+};
+
+usersHub.client.updateGauge = function (value) {
+    $('#gauge').width(value + '%');
+};
+
+usersHub.client.blockUI = function () {
+    $('#block-ui').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+
+    $('#block-ui').modal('show');
+};
+
+$.connection.hub.start();
+
+function checkAuthorized() {
+    $.ajax({
+        url: getBaseApiURL() + 'Users/IsAuthenticated',
+        success: function (data) {
+            if (data) {
+                setTimeout(checkAuthorized, 5700000);
+            }
+            else {
+                $.post(getBaseApiURL() + 'Users/Disconnect?connectionID=' + $.connection.hub.id)
+                    .done(function () {
+                        window.location.href = "/User/Login";
+                    });
+            }
+        }
+    });
+}
